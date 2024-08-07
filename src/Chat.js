@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import "./Chat.css";
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -40,16 +41,29 @@ const Chat = () => {
 
   return (
     <div className="chat-container">
+      <div className="chat-header">
+        <h2>RAG Chat</h2>
+      </div>
       <div className="messages">
         {messages.map((message, index) => (
           <div key={index} className={`message ${message.sender}`}>
-            {message.text}
+            <div className="message-content">{message.text}</div>
           </div>
         ))}
-        {isLoading && <div className="message bot">Thinking...</div>}
+        {isLoading && (
+          <div className="message bot">
+            <div className="message-content">
+              <div className="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+        )}
         <div ref={messagesEndRef} />
       </div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="chat-input-form">
         <input
           type="text"
           value={input}
