@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Send } from "lucide-react";
 
-const Chat = () => {
+const Chat = ({ endpoint, title }) => {
+  // props 추가
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +25,7 @@ const Chat = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("/chat", { message: input });
+      const response = await axios.post(endpoint, { message: input }); // endpoint를 props로 받아서 사용
       const botMessage = { text: response.data.response, sender: "bot" };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
@@ -40,9 +41,9 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-screen bg-gray-900 text-gray-100 overflow-hidden">
+    <div className="flex flex-col w-full h-full bg-gray-900 text-gray-100 overflow-hidden">
       <div className="bg-gray-800 py-4 px-6">
-        <h2 className="text-xl font-semibold">ACRA AI</h2>
+        <h2 className="text-xl font-semibold">{title}</h2>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -59,7 +60,7 @@ const Chat = () => {
               }`}
             >
               <div className="font-bold mb-1">
-                {message.sender === "user" ? "You" : "ACRA AI"}
+                {message.sender === "user" ? "You" : title}
               </div>
               {message.text}
             </div>
