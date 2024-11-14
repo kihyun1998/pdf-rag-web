@@ -7,6 +7,7 @@ function App() {
   const tabs = [
     { id: "langchain", title: "LangChain Chat", endpoint: "/chat" },
     { id: "google", title: "Google Chat", endpoint: "/chat-google" },
+    // { id: "korean", title: "Korean Chat", endpoint: "/chat-korean" },
   ];
 
   return (

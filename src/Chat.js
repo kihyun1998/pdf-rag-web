@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { Send } from "lucide-react";
+import { Send, RefreshCw } from "lucide-react";
 
 const Chat = ({ endpoint, title }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isEmbedding, setIsEmbedding] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -13,6 +14,34 @@ const Chat = ({ endpoint, title }) => {
   };
 
   useEffect(scrollToBottom, [messages]);
+
+  const handleEmbed = async () => {
+    setIsEmbedding(true);
+    try {
+      // 각 채팅에 맞는 임베딩 엔드포인트 선택
+      const embedEndpoint =
+        title === "LangChain Chat"
+          ? "/pdf/embed/langchain-google"
+          : "/pdf/embed/google";
+
+      await axios.post(embedEndpoint);
+
+      const systemMessage = {
+        text: "PDF embedding completed successfully.",
+        sender: "bot",
+      };
+      setMessages((prev) => [...prev, systemMessage]);
+    } catch (error) {
+      console.error("Error embedding PDF:", error);
+      const errorMessage = {
+        text: "Sorry, there was an error during PDF embedding.",
+        sender: "bot",
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsEmbedding(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,14 +70,24 @@ const Chat = ({ endpoint, title }) => {
 
   return (
     <div className="flex flex-col h-full bg-gray-900 text-gray-100">
-      {/* 헤더 고정 */}
-      <div className="bg-gray-800 py-4 px-6 flex-none">
+      {/* 헤더에 임베딩 버튼 추가 */}
+      <div className="bg-gray-800 py-4 px-6 flex-none flex justify-between items-center">
         <h2 className="text-xl font-semibold">{title}</h2>
+        <button
+          onClick={handleEmbed}
+          disabled={isEmbedding}
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg disabled:bg-gray-600"
+        >
+          <RefreshCw
+            size={20}
+            className={`${isEmbedding ? "animate-spin" : ""}`}
+          />
+          {isEmbedding ? "Embedding..." : "Embed PDF"}
+        </button>
       </div>
 
-      {/* 메시지 영역을 flex-1로 설정하고 relative로 변경 */}
+      {/* 메시지 영역 */}
       <div className="flex-1 overflow-hidden relative">
-        {/* 실제 메시지들이 스크롤되는 컨테이너 */}
         <div className="absolute inset-0 overflow-y-auto p-4 space-y-4">
           {messages.map((message, index) => (
             <div
@@ -84,7 +123,7 @@ const Chat = ({ endpoint, title }) => {
         </div>
       </div>
 
-      {/* 입력 영역을 flex-none으로 설정하여 고정 */}
+      {/* 입력 영역 */}
       <div className="flex-none border-t border-gray-700 p-4 bg-gray-900">
         <form onSubmit={handleSubmit} className="flex items-center">
           <input
