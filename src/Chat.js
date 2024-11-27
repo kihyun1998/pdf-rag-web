@@ -19,10 +19,28 @@ const Chat = ({ endpoint, title }) => {
     setIsEmbedding(true);
     try {
       // 각 채팅에 맞는 임베딩 엔드포인트 선택
-      const embedEndpoint =
-        title === "LangChain Chat"
-          ? "/pdf/embed/langchain-google"
-          : "/pdf/embed/google";
+      // const embedEndpoint =
+      //   title === "LangChain Chat"
+      //     ? "/pdf/embed/langchain-google"
+      //     : "/pdf/embed/google";
+      let embedEndpoint;
+      switch (title) {
+        case "LangChain Chat":
+          embedEndpoint = "/pdf/embed/langchain-google";
+          break;
+        case "Google Chat":
+          embedEndpoint = "/pdf/embed/google";
+          break;
+        case "Chat GPT":
+          embedEndpoint = "/pdf/embed/gpt";
+          break;
+        case "Chat Gemini":
+          embedEndpoint = "/pdf/embed/gemini";
+          break;
+        default:
+          embedEndpoint = "/pdf/embed/google";
+          break;
+      }
 
       await axios.post(embedEndpoint);
 
