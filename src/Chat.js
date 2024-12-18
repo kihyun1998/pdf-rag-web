@@ -34,11 +34,15 @@ const Chat = ({ endpoint, title }) => {
         case "Chat GPT":
           embedEndpoint = "/pdf/embed/gpt";
           break;
+        case "Chat GPT V1":
+          embedEndpoint = "/pdf/embed/gpt/v1";
+          break;
         case "Chat Gemini":
           embedEndpoint = "/pdf/embed/gemini";
           break;
-        case "Chat GPT V1":
-          embedEndpoint = "/pdf/embed/gpt/v1";
+
+        case "Chat Gemini V1":
+          embedEndpoint = "/pdf/embed/gemini/v1";
           break;
         default:
           embedEndpoint = "/pdf/embed/google";

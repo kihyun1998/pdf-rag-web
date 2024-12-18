@@ -12,6 +12,7 @@ const App = () => {
     { id: "gpt", title: "Chat GPT", endpoint: "/chat-gpt" },
     { id: "gptv1", title: "Chat GPT V1", endpoint: "/chat-gpt-v1" },
     { id: "gemini", title: "Chat Gemini", endpoint: "/chat-gemini" },
+    { id: "geminiv1", title: "Chat Gemini V1", endpoint: "/chat-gemini-v1" },
   ];
 
   const activeOption = chats.find((chat) => chat.id === activeChat);
